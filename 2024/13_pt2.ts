@@ -38,35 +38,15 @@ for (let i = 0; i < lines.length; i++) {
 var solution = 0
 
 for (let game of games) {
-	let button_a = game.button_a
-	let button_b = game.button_b
-	let prize = game.prize
+	let [ay, ax] = game.button_a
+	let [by, bx] = game.button_b
+	let [py, px] = game.prize
 
-	let temp_solutions: { a_count: number, b_count: number }[] = []
 
-	const max_a_x = Math.floor(prize[1] / button_a[1])
-	let a_count = max_a_x
-	let b_count = 0
-	while (a_count >= 0) {
-		let coords = [a_count * button_a[0] + b_count * button_b[0], a_count * button_a[1] + b_count * button_b[1]]
+	let ca = ((px * by) - (py * bx)) / ((ax * by) - (ay * bx))
+	let cb = (px - (ax * ca)) / bx
 
-		if (coords[0] === prize[0] && coords[1] === prize[1]) {
-			temp_solutions.push({ a_count, b_count })
-			a_count--
-		} else if (coords[0] > prize[0] || coords[1] > prize[1]) {
-			a_count--
-		} else {
-			b_count++
-		}
-	}
-
-	if (temp_solutions.length === 0) {
-		continue
-	}
-	//console.log(temp_solutions);
-	const min = temp_solutions.map(x => x.a_count * B_A + x.b_count * B_B).sort()[0]
-	solution += min
-	console.log(min);
+	if (Number.isInteger(ca) && Number.isInteger(cb)) solution += ca * B_A + cb * B_B
 }
 
 console.log(solution)
